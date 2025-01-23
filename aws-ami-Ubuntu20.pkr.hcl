@@ -1,7 +1,7 @@
 packer {
   required_plugins {
     amazon = {
-      version = ">= 0.0.2"
+      version = ">= 1.2.8"
       source  = "github.com/hashicorp/amazon"
     }
   }
@@ -31,5 +31,4 @@ build {
     playbook_file = "ubuntu-playbook.yml"
   }
 }
-
 
