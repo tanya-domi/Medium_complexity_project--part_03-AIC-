@@ -15,10 +15,10 @@ source "amazon-ebs" "Amazon_ami_image" {
   source_ami                  = "ami-0df8c184d5f6ae949"
   ssh_username                = "ec2-user"
   associate_public_ip_address = true
-  subnet_id                   = "subnet-0c73b32bab4dd304b" 
-  security_group_id           = "sg-095cfde1b765e31f4" 
-  ami_regions = [  
-    "us-east-1" ]
+  subnet_id                   = "subnet-0b071534fa2f383b8"
+  security_group_id           = "sg-0f57a7c1ce5b0811b"
+  ami_regions = [
+  "us-east-1"]
 }
 
 // build {
@@ -38,24 +38,24 @@ build {
   ]
 
   provisioner "file" {
-  source = "provisioner.sh"
-  destination = "/tmp/provisioner.sh"
-}
+    source      = "provisioner.sh"
+    destination = "/tmp/provisioner.sh"
+  }
 
   provisioner "shell" {
     inline = ["chmod a+x /tmp/provisioner.sh"]
   }
-  
+
   provisioner "shell" {
-    inline = [ "ls -la /tmp"]
+    inline = ["ls -la /tmp"]
   }
-  
-    provisioner "shell" {
-    inline = [ "pwd"]
-  }
-  
+
   provisioner "shell" {
-    inline = [ "cat /tmp/provisioner.sh"]
+    inline = ["pwd"]
+  }
+
+  provisioner "shell" {
+    inline = ["cat /tmp/provisioner.sh"]
   }
 
   provisioner "shell" {
