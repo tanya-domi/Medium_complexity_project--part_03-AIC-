@@ -1,11 +1,12 @@
 packer {
   required_plugins {
     amazon = {
-      version = ">= 0.0.2"
+      version = ">= 1.2.8"
       source  = "github.com/hashicorp/amazon"
     }
   }
 }
+
 
 source "amazon-ebs" "Amazon_ami_image" {
   region                      = "us-east-1"
