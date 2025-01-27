@@ -1,38 +1,50 @@
 pipeline {
     agent any
-    environment {
-                AWS_ACCESS_KEY_ID = credentials('aws_access_key_id')
-                AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
-            }
+      tools {
+        jfrog 'jfrog-cli'
+      }
     stages {
-        stage ('Packer init') {
+        stage('snyk scan') {
             steps {
-                    echo 'initializing packer'
-                    sh 'packer init aws-ami-AmazonLinux2.pkr.hcl'
-            }  
+                snykSecurity(
+                    snykInstallation: 'snyk@latest',
+                    snykTokenId: 'snyk_api_token',
+                    monitorProjectOnBuild: false,
+                    failOnIssues: false,  // Use boolean for failOnIssues
+                    additionalArguments: '--json-file-output=all-vulnerabilities.json'
+                )
+            }
         }
-        stage ('Packer fmt') {
+        stage('maven build artifact') {
             steps {
-                script {
-                    echo 'formatting packer code'
-                    sh 'packer fmt aws-ami-AmazonLinux2.pkr.hcl'
+              // jf 'mvn-config --petclinic_artifact-libs-release --petclinic_artifact-libs-snapshot --petclinic_artifact-libs-release-local --petclinic_artifact-libs-snapshot-local'
+
+
+                 sh 'mvn clean package -DskipTests=true '  // Correct capitalization for -DskipTests
+            }
+        }
+       stage('building docker image') {
+            steps {
+                sh "docker build -t dts81/petclinic:${BUILD_NUMBER} ."
+            }
+        }
+        stage('docker image push') {
+            steps {
+                withDockerRegistry(credentialsId: 'dockercred', url: '') {
+                    sh "docker push dts81/petclinic:${BUILD_NUMBER}"
                 }
-            }  
+            }
         }
-        stage ('Packer validate') {
+        stage('Publish build info') {
             steps {
-                script {
-                    echo 'validating packer code'
-                    sh 'packer validate aws-ami-AmazonLinux2.pkr.hcl'
-                }
-            }  
+                jf 'rt build-publish'
+            }
         }
-        stage ('packer build ami') {
+       stage('push artifact') {
             steps {
-                    echo 'building ami'
-                    sh 'packer build aws-ami-AmazonLinux2.pkr.hcl'
-            }  
+              jf 'rt u /var/lib/jenkins/workspace/pipeline_part2/target/spring-petclinic-3.4.0-SNAPSHOT.jar  petclinic_artifact-libs-snapshot-local/springpetclinic/spring-petclinic-3.4.0-SNAPSHOT.jar'
+            }
         }
-        
+
     }
 }
