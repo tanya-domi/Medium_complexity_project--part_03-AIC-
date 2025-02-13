@@ -1,4 +1,3 @@
- Medium_complexity_project--part_03-AIC-
 
 
 # Infrastructure Deployment using IAC and CI/CD Pipeline Implementation.
