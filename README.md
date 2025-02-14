@@ -55,19 +55,6 @@ Shell Script or Ansible provisioner.
 ![Image](https://github.com/user-attachments/assets/31504fd2-0b0b-43ca-8f8a-7928ea653013)
 
 
-# Part 2
-# Key requirements for Application Build
-
-1. Use any CI tool
-2. Make sure the code is scanned using Sonar Cloud (Create a free account on https://sonarcloud.io)
-3. The code needs to be scanned and built on every branch code commit.
-4. Build the project using Maven and produce the war/jar files as outcome.
-5. Containerize docker image as final output.
-6. Create a free account on JFROG Artifactory because this will be used to store JAR/Docker Image.
-7. Differentiate and Tag between final output produced by a feature branch or main branch
-
-![Image](https://github.com/user-attachments/assets/ccd08b8c-d08a-40bd-a293-939a7338e5ff)
-
 # Part 3
  
 # Infrastructure provisioning using Terraform
