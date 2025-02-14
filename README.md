@@ -7,8 +7,11 @@ Code practices and to establish a DevOps pipeline for building the application a
 
 # Part 1
 # Software's required on AMI
+
 • CloudWatch Agent
+
 • AWS SSM Agent
+
 • Docker
 
 # Creation of a Base AMI using Packer
